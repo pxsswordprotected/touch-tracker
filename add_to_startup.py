@@ -4,23 +4,20 @@ from pathlib import Path
 import winreg as reg
 
 def add_to_startup():
-    # Get the path of the Python script
+    # get path of the Python script
     script_path = os.path.abspath(sys.argv[0])
     
-    # Create the key in registry
+    # create  key in registry
     key_path = r"Software\Microsoft\Windows\CurrentVersion\Run"
     
     try:
-        # Open the key
+        # open  key
         key = reg.OpenKey(reg.HKEY_CURRENT_USER, key_path, 0, reg.KEY_SET_VALUE)
         
-        # Create the command to run the script
         command = f'pythonw "{script_path}"'
         
-        # Set the key
         reg.SetValueEx(key, "FaceTouchTracker", 0, reg.REG_SZ, command)
         
-        # Close the key
         reg.CloseKey(key)
         print("Successfully added to startup!")
         
