@@ -4,7 +4,7 @@ A simple desktop application to help you track how many times you touch your fac
 
 ## Features
 
-- **Simple Interface**: Clean, minimal window that stays on top of other applications
+- Clean, minimal window that stays on top of other applications
 - **Multiple Input Methods**:
   - Click the "+ Touch" button
   - Press Shift key 3 times quickly (works even when window isn't focused)
