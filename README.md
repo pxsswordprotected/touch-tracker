@@ -12,8 +12,8 @@ A simple desktop application to help you track how many times you touch your fac
   - Displays daily counts for the entire week
   - Automatically resets counts every Monday
   - Manual reset option for today's count
-- **Persistent Storage**: Saves your data between sessions
-- **Windows Integration**: Can be set to start automatically with Windows
+- Saves your data between sessions
+- Can be set to start automatically with Windows
 
 ## Installation
 
