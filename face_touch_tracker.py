@@ -12,25 +12,20 @@ class FaceTouchTracker:
     def __init__(self):
         self.window = tk.Tk()
         self.window.title("Face Touch Tracker")
-        self.window.geometry("300x450")  # Made slightly taller for reset button
+        self.window.geometry("300x450")  
         self.window.attributes('-topmost', True)
         
-        # Data file path in user's documents
         self.data_file = os.path.join(Path.home(), "Documents", "face_touches.json")
         
-        # Load or initialize data
         self.load_data()
         
-        # Check if it's Monday and reset if needed
         self.check_and_reset()
         
-        # Create GUI elements
         self.create_widgets()
         
-        # Save data when closing
+        # save data when closing
         self.window.protocol("WM_DELETE_WINDOW", self.on_closing)
 
-        # Setup keyboard listener
         self.shift_times = []
         self.setup_keyboard_listener()
 
@@ -39,21 +34,18 @@ class FaceTouchTracker:
             while True:
                 keyboard.wait('shift')
                 current_time = time.time()
-                # Clean old timestamps
                 self.shift_times = [t for t in self.shift_times if current_time - t < 1.0]
                 self.shift_times.append(current_time)
                 
                 if len(self.shift_times) >= 3:
-                    # Check if all 3 presses happened within 1 second
+                    # check if all 3 presses happened within 1 second
                     if current_time - self.shift_times[0] < 1.0:
                         self.window.after(0, self.increment_count)
-                        self.shift_times = []  # Reset after successful trigger
+                        self.shift_times = []  
                     
-                # Keep only last 3 timestamps
                 if len(self.shift_times) > 3:
                     self.shift_times = self.shift_times[-3:]
 
-        # Start keyboard listener in separate thread
         Thread(target=check_triple_shift, daemon=True).start()
 
     def load_data(self):
@@ -61,7 +53,6 @@ class FaceTouchTracker:
             with open(self.data_file, 'r') as f:
                 self.data = json.load(f)
         except FileNotFoundError:
-            # Initialize with weekdays if file doesn't exist
             self.data = {
                 'Monday': 0,
                 'Tuesday': 0,
@@ -83,7 +74,7 @@ class FaceTouchTracker:
         last_reset = datetime.strptime(self.data['last_reset'], '%Y-%m-%d')
         today = datetime.now()
         
-        # If it's Monday and last reset wasn't today
+        # if it's Monday and last reset wasn't today
         if today.weekday() == 0 and last_reset.date() != today.date():
             self.reset_all_days()
 
@@ -101,7 +92,7 @@ class FaceTouchTracker:
         self.update_display()
 
     def create_widgets(self):
-        # Big counter button
+        # counter button
         self.count_button = tk.Button(
             self.window,
             text="+ Touch",
@@ -114,7 +105,7 @@ class FaceTouchTracker:
         )
         self.count_button.pack(pady=20)
 
-        # Display for today's count
+        # display for today's count
         self.today_label = tk.Label(
             self.window,
             text="Today's Count:",
@@ -129,7 +120,7 @@ class FaceTouchTracker:
         )
         self.today_count.pack()
 
-        # Reset today's count button
+        # reset today's count button
         self.reset_button = tk.Button(
             self.window,
             text="Reset Today's Count",
@@ -142,7 +133,7 @@ class FaceTouchTracker:
         )
         self.reset_button.pack(pady=10)
 
-        # Weekly summary
+        # weekly summary
         tk.Label(
             self.window,
             text="This Week:",
@@ -161,7 +152,6 @@ class FaceTouchTracker:
             self.day_labels[day] = tk.Label(frame, text="0", font=('Arial', 8))
             self.day_labels[day].pack()
 
-        # Keyboard shortcut info
         tk.Label(
             self.window,
             text="Press Shift 3 times quickly to add count",
